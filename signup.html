@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body, html {
+      height: 100%;
+      background: #f8f9fa;
+    }
+    .form-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .form-box {
+      width: 100%;
+      max-width: 400px;
+      padding: 30px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .error-message {
+      color: red;
+      font-size: 0.875rem;
+      margin-top: 5px;
+      display: none;
+    }
+    .sign-in-link {
+      font-size: 0.875rem;
+      display: block;
+      text-align: center;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <div class="form-box">
+      <h2 class="text-center mb-4">Sign Up</h2>
+
+      <!-- Full Name Field -->
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="fullName" placeholder="Full Name">
+        <label for="fullName">Full Name</label>
+        <p class="error-message" id="fullNameError">Full name is required</p>
+      </div>
+
+      <!-- Email Address Field -->
+      <div class="form-floating mb-3">
+        <input type="email" class="form-control" id="emailInput" placeholder="name@example.com">
+        <label for="emailInput">Email Address</label>
+        <p class="error-message" id="emailError">Invalid email address</p>
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-floating mb-3">
+        <input type="password" class="form-control" id="passwordInput" placeholder="Password">
+        <label for="passwordInput">Password</label>
+        <p class="error-message" id="passwordError">Password must be at least 6 characters, contain a number & special character</p>
+      </div>
+
+      <!-- Sign Up Button -->
+      <button class="btn btn-primary w-100 mb-3" onclick="validateSignUp()">Sign Up</button>
+
+      <!-- Link to Sign In -->
+      <div class="sign-in-link">
+        <span>Already have an account? </span>
+        <a href="#">Sign In</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function validateSignUp() {
+      const fullName = document.getElementById("fullName").value.trim();
+      const email = document.getElementById("emailInput").value.trim();
+      const password = document.getElementById("passwordInput").value.trim();
+
+      const fullNameError = document.getElementById("fullNameError");
+      const emailError = document.getElementById("emailError");
+      const passwordError = document.getElementById("passwordError");
+
+      let isValid = true;
+
+      // Full Name Validation
+      if (fullName === "") {
+        fullNameError.style.display = "block";
+        isValid = false;
+      } else {
+        fullNameError.style.display = "none";
+      }
+
+      // Email Validation
+      if (!email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
+        emailError.style.display = "block";
+        isValid = false;
+      } else {
+        emailError.style.display = "none";
+      }
+
+      // Password Validation (min 6 characters, at least one number and special character)
+      if (!password.match(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,}$/)) {
+        passwordError.style.display = "block";
+        isValid = false;
+      } else {
+        passwordError.style.display = "none";
+      }
+
+      // If all validations pass, simulate successful registration
+      if (isValid) {
+        alert("Sign Up Successful!");
+      }
+    }
+  </script>
+
+</body>
+</html>

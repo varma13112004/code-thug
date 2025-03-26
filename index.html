@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            text-align: center;
+        }
+        .chat-container {
+            max-width: 600px;
+            margin: auto;
+            margin-top: 50px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .chat-box {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #fafafa;
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 5px;
+            text-align: left;
+        }
+        .own-message {
+            background-color: #6a11cb;
+            color: white;
+            text-align: right;
+        }
+        .other-message {
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chat-container">
+        <h4>Real-time Chat</h4>
+        <input type="text" id="username" class="form-control mb-2" placeholder="Enter your name" required>
+        <div class="chat-box" id="chatBox"></div>
+        <input type="text" id="messageInput" class="form-control mt-2" placeholder="Type your message...">
+        <button class="btn btn-primary mt-2" onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        const socket = io("http://YOUR_IP:3000"); // Replace YOUR_IP with actual server IP
+        const chatBox = document.getElementById('chatBox');
+        const usernameInput = document.getElementById('username');
+        const messageInput = document.getElementById('messageInput');
+
+        // Function to send a message
+        function sendMessage() {
+            let username = usernameInput.value.trim();
+            let messageText = messageInput.value.trim();
+
+            if (username === '') {
+                alert("Please enter your name.");
+                return;
+            }
+
+            if (messageText !== '') {
+                const messageData = { username, message: messageText };
+
+                // Emit message to server
+                socket.emit("sendMessage", messageData);
+
+                messageInput.value = '';
+            }
+        }
+
+        // Receive messages from server
+        socket.on("receiveMessage", (data) => {
+            let messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', data.username === usernameInput.value ? 'own-message' : 'other-message');
+            messageDiv.innerHTML = `<strong>${data.username}:</strong> ${data.message}`;
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+    </script>
+</body>
+</html>
